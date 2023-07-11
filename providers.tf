@@ -5,6 +5,10 @@ terraform {
       source  = "hashicorp/aws"
       version = ">= 4.0"
     }
+    oci = {
+      source  = "hashicorp/oci"
+      version = ">= 4.0.0"
+    }
   }
   backend "s3" {
       bucket = "hybridinfrastatebucket"
@@ -21,5 +25,10 @@ provider "aws" {
   alias  = "us"
 }
 
+
+provider "oci" {
+  region="us-phoenix-1"
+  alias="oci_us"
+}
 
 
