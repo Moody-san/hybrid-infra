@@ -45,3 +45,6 @@ variable "icmp_ingress_rules" {
     type     = 8
   }
 }
+
+variable "compartment_id" {
+}
