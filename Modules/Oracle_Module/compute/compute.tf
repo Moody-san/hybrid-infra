@@ -5,7 +5,7 @@ resource "oci_core_instance" "server" {
   shape               = var.image_shape
 
   create_vnic_details {
-    subnet_id        = var.subnet.id
+    subnet_id        = var.subnet_id
     assign_public_ip = true
   }
   source_details {

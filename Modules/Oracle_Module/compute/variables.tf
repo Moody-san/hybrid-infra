@@ -19,7 +19,7 @@ variable "cpu" {
 }
 
 variable "memory" {
-  default = "8"
+  default = "6"
 }
 
 variable "server_name" {
@@ -37,7 +37,6 @@ variable "compartment_id" {
 }
 
 variable "subnet_id" {
-
 }
 
 variable "image_id" {
