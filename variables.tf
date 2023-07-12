@@ -12,12 +12,15 @@ variable "image_id" {
 variable "subscription_id_1" {
 
 }
-variable "client_id_1" {
+variable "subscription_id_2" {
 
 }
-variable "client_secret_1" {
+variable "client_id" {
 
 }
-variable "tenant_id_1" {
+variable "client_secret" {
+
+}
+variable "tenant_id" {
 
 }
