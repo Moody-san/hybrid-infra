@@ -9,6 +9,10 @@ terraform {
       source  = "hashicorp/oci"
       version = ">= 4.0.0"
     }
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = ">=3.0.0"
+    }
   }
   backend "s3" {
     bucket         = "hybridinfrastatebucket"
@@ -32,3 +36,11 @@ provider "oci" {
 }
 
 
+provider "azurerm" {
+  features {}
+  subscription_id = var.subscription_id_1
+  client_id       = var.client_id_1
+  client_secret   = var.client_secret_1
+  tenant_id       = var.tenant_id_1
+  alias           = "azure_ind"
+}
