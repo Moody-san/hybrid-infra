@@ -44,8 +44,9 @@ resource "azurerm_network_security_group" "azurensg" {
   resource_group_name = azurerm_resource_group.azurerg.name
 
   security_rule {
-    name                       = "test123"
-    direction                  = "Outbound"
+    name                       = "ping_rule"
+    priority                   = 100
+    direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Icmp"
     source_port_range          = "*"
@@ -54,32 +55,34 @@ resource "azurerm_network_security_group" "azurensg" {
     destination_address_prefix = "*"
   }
   security_rule {
-    name                       = "test123"
-    direction                  = "Inbound"
+    priority                   = 100
+    name                       = "egress_rules_all_allowed"
+    direction                  = "Outbound"
     access                     = "Allow"
-    protocol                   = "Tcp"
+    protocol                   = "*"
     source_port_range          = "*"
     destination_port_range     = "*"
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
 
-    dynamic security_rule {
-    for_each = tosets(var.ports)
+  dynamic "security_rule" {
+    for_each = { for option in var.tcp_options : option.port => option }
     content {
-        name                       = "${var.prefix}_inbound_rule${security_rule.value}"
-        direction                  = "Inbound"
-        access                     = "Allow"
-        protocol                   = "Tcp"
-        source_port_range          = "*"
-        destination_port_range     = security_rule.value
-        source_address_prefix      = "*"
-        destination_address_prefix = "*"
+      priority                   = security_rule.value.priority
+      name                       = "${var.prefix}_inbound_rule_${security_rule.value.port}"
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = security_rule.value.port
+      source_address_prefix      = "*"
+      destination_address_prefix = "*"
     }
   }
 }
 
 resource "azurerm_subnet_network_security_group_association" "azurensgsubnet" {
-    subnet_id = azurerm_subnet.internal.id
-    network_security_group_id = azurerm_network_security_group.azurensg.id
+  subnet_id                 = azurerm_subnet.internal.id
+  network_security_group_id = azurerm_network_security_group.azurensg.id
 }
