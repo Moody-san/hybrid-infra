@@ -11,11 +11,11 @@ terraform {
     }
   }
   backend "s3" {
-      bucket = "hybridinfrastatebucket"
-      dynamodb_table ="hybridinfrastatelockdb"
-      key = "remote_backend/terraform.tfstate"
-      region = "us-east-1"
-      encrypt = true
+    bucket         = "hybridinfrastatebucket"
+    dynamodb_table = "hybridinfrastatelockdb"
+    key            = "remote_backend/terraform.tfstate"
+    region         = "us-east-1"
+    encrypt        = true
   }
 }
 
@@ -27,8 +27,8 @@ provider "aws" {
 
 
 provider "oci" {
-  region="us-phoenix-1"
-  alias="oci_us"
+  region = "us-phoenix-1"
+  alias  = "oci_us"
 }
 
 
