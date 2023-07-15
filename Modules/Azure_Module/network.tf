@@ -21,7 +21,7 @@ resource "azurerm_public_ip" "azurepubip" {
   name                = "${var.prefix}_pubip"
   location            = azurerm_resource_group.azurerg.location
   resource_group_name = azurerm_resource_group.azurerg.name
-  allocation_method   = "Static"
+  allocation_method   = var.pub_ip_type
 }
 
 resource "azurerm_network_interface" "azurenic" {
@@ -44,11 +44,11 @@ resource "azurerm_network_security_group" "azurensg" {
   resource_group_name = azurerm_resource_group.azurerg.name
 
   security_rule {
-    name                       = "ping_rule"
+    name                       = "ingress_rules_all_allowed"
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
-    protocol                   = "Icmp"
+    protocol                   = "*"
     source_port_range          = "*"
     destination_port_range     = "*"
     source_address_prefix      = "*"
@@ -66,20 +66,20 @@ resource "azurerm_network_security_group" "azurensg" {
     destination_address_prefix = "*"
   }
 
-  dynamic "security_rule" {
-    for_each = { for option in var.tcp_options : option.port => option }
-    content {
-      priority                   = security_rule.value.priority
-      name                       = "${var.prefix}_inbound_rule_${security_rule.value.port}"
-      direction                  = "Inbound"
-      access                     = "Allow"
-      protocol                   = "Tcp"
-      source_port_range          = "*"
-      destination_port_range     = security_rule.value.port
-      source_address_prefix      = "*"
-      destination_address_prefix = "*"
-    }
-  }
+  # dynamic "security_rule" {
+  #   for_each = { for option in var.tcp_options : option.port => option }
+  #   content {
+  #     priority                   = security_rule.value.priority
+  #     name                       = "${var.prefix}_inbound_rule_${security_rule.value.port}"
+  #     direction                  = "Inbound"
+  #     access                     = "Allow"
+  #     protocol                   = "Tcp"
+  #     source_port_range          = "*"
+  #     destination_port_range     = security_rule.value.port
+  #     source_address_prefix      = "*"
+  #     destination_address_prefix = "*"
+  #   }
+  # }
 }
 
 resource "azurerm_subnet_network_security_group_association" "azurensgsubnet" {
