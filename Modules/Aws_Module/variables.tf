@@ -1,6 +1,6 @@
-variable "ports" {
-  default = [22, 443, 80]
-}
+# variable "ports" {
+#   default = [22, 443, 80]
+# }
 
 variable "cidr_block_ip" {
   default = "11.0.0.0/16"

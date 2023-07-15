@@ -49,10 +49,9 @@ resource "aws_security_group" "allow_web" {
 
 
   ingress {
-    description = "ping"
-    from_port   = -1
-    to_port     = -1
-    protocol    = "icmp"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = [var.all_ips]
   }
   egress {
@@ -66,15 +65,15 @@ resource "aws_security_group" "allow_web" {
     Name = "allow_web"
   }
 
-  dynamic "ingress" {
-    for_each = toset(var.ports)
-    content {
-      protocol    = "tcp"
-      from_port   = ingress.value
-      to_port     = ingress.value
-      cidr_blocks = [var.all_ips]
-    }
-  }
+  # dynamic "ingress" {
+  #   for_each = toset(var.ports)
+  #   content {
+  #     protocol    = "tcp"
+  #     from_port   = ingress.value
+  #     to_port     = ingress.value
+  #     cidr_blocks = [var.all_ips]
+  #   }
+  # }
 }
 
 resource "aws_network_interface" "web-server-nic" {
