@@ -29,22 +29,22 @@ variable "egress_rules" {
     destination = "0.0.0.0/0"
   }
 }
-variable "tcp_ingress_rules" {
+variable "ingress_rules" {
   default = {
-    protocol = "6"
+    protocol = "all"
     source   = "0.0.0.0/0"
   }
 }
-variable "ingress_ports" {
-  default = [22, 80, 443]
-}
-variable "icmp_ingress_rules" {
-  default = {
-    protocol = "1"
-    source   = "0.0.0.0/0"
-    type     = 8
-  }
-}
+# variable "ingress_ports" {
+#   default = [22, 80, 443]
+# }
+# variable "icmp_ingress_rules" {
+#   default = {
+#     protocol = "1"
+#     source   = "0.0.0.0/0"
+#     type     = 8
+#   }
+# }
 
 variable "compartment_id" {
 }
