@@ -20,5 +20,15 @@ resource "oci_core_instance" "server" {
   metadata = {
     ssh_authorized_keys = file(var.ssh_key)
   }
+
+  provisioner "remote-exec" {
+    inline = [
+      "export DEBIAN_FRONTEND=noninteractive",
+      "apt update -y",
+      "apt upgrade -y",
+      # Additional setup commands here
+      "shutdown -r now"
+    ]
+  }
 }
 
