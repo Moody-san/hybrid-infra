@@ -42,24 +42,22 @@ resource "oci_core_security_list" "securitylist" {
     destination = var.egress_rules.destination
   }
 
-  dynamic "ingress_security_rules" {
-    for_each = toset(var.ingress_ports)
-    content {
-      protocol = var.tcp_ingress_rules.protocol
-      source   = var.tcp_ingress_rules.source
-      tcp_options {
-        min = ingress_security_rules.value
-        max = ingress_security_rules.value
-      }
-    }
-  }
+  # dynamic "ingress_security_rules" {
+  #   for_each = toset(var.ingress_ports)
+  #   content {
+  #     protocol = var.tcp_ingress_rules.protocol
+  #     source   = var.tcp_ingress_rules.source
+  #     tcp_options {
+  #       min = ingress_security_rules.value
+  #       max = ingress_security_rules.value
+  #     }
+  #   }
+  # }
 
 
   ingress_security_rules {
-    protocol = var.icmp_ingress_rules.protocol # ICMP
-    source   = var.icmp_ingress_rules.source
-    icmp_options {
-      type = var.icmp_ingress_rules.type
-    }
+    protocol = var.ingress_rules.protocol
+    source   = var.ingress_rules.source
+  
   }
 }
