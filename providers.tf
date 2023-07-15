@@ -14,13 +14,13 @@ terraform {
       version = ">=3.0.0"
     }
   }
-  backend "s3" {
-    bucket         = "hybridinfrastatebucket"
-    dynamodb_table = "hybridinfrastatelockdb"
-    key            = "remote_backend/terraform.tfstate"
-    region         = "us-east-1"
-    encrypt        = true
-  }
+  # backend "s3" {
+  #   bucket         = "hybridinfrastatebucket"
+  #   dynamodb_table = "hybridinfrastatelockdb"
+  #   key            = "remote_backend/terraform.tfstate"
+  #   region         = "us-east-1"
+  #   encrypt        = true
+  # }
 }
 
 
