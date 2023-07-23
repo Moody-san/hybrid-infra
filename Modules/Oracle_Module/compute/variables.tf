@@ -42,3 +42,6 @@ variable "subnet_id" {
 variable "image_id" {
 }
 
+variable "private_ip" {
+  
+}
