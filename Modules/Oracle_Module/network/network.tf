@@ -2,6 +2,7 @@ resource "oci_core_vcn" "vcn" {
   compartment_id = var.compartment_id
   cidr_block     = var.cidr_ip_block
   display_name   = var.vcn_name
+  dns_label = var.vcn_name
 }
 
 resource "oci_core_internet_gateway" "igw" {
@@ -29,7 +30,31 @@ resource "oci_core_subnet" "subnet" {
   cidr_block          = var.subnet_ip
   route_table_id      = oci_core_route_table.prt.id
   security_list_ids   = [oci_core_security_list.securitylist.id]
+  prohibit_public_ip_on_vnic = false
+  dns_label= var.subnet_name
+  dhcp_options_id= oci_core_dhcp_options.test_dhcp_options.id
 }
+
+resource "oci_core_dhcp_options" "test_dhcp_options" {
+    #Required
+    compartment_id = var.compartment_id
+    options {
+        type = "DomainNameServer"
+        server_type = "VcnLocalPlusInternet"
+    }
+
+    options {
+        type = "SearchDomain"
+        search_domain_names = [ "subnet.vcn1.oraclevcn.com"]
+    }
+
+    vcn_id = oci_core_vcn.vcn.id
+
+    #Optional
+    display_name = "customdhcp"
+}
+
+
 
 resource "oci_core_security_list" "securitylist" {
 

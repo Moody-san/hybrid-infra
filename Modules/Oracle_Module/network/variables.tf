@@ -1,9 +1,9 @@
 #Network variables
 variable "cidr_ip_block" {
-  default = "10.0.0.0/16"
+  default = "11.0.0.0/16"
 }
 variable "vcn_name" {
-  default = "vcn"
+  default = "vcn1"
 }
 variable "internet_gateway_name" {
   default = "igw"
@@ -18,7 +18,7 @@ variable "subnet_name" {
   default = "subnet"
 }
 variable "subnet_ip" {
-  default = "10.0.1.0/24"
+  default = "11.0.1.0/24"
 }
 variable "security_list_name" {
   default = "sl"
