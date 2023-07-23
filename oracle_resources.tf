@@ -5,19 +5,22 @@ data "oci_identity_availability_domains" "ads" {
 variable "servers" {
   default = [
     {
-      display_name = "oracle_master "
+      display_name = "oraclemaster"
       cpu          = 2
       memory = 8
+      private_ip = "11.0.1.20"
     },
     {
-      display_name = "oracle_worker1"
+      display_name = "oracleworker1"
       cpu          = 1
       memory = 8
+      private_ip = "11.0.1.21"
     },
     {
-      display_name = "oracle_worker2"
+      display_name = "oracleworker2"
       cpu          = 1
       memory = 8
+      private_ip = "11.0.1.22"
     }
   ]
 }
@@ -37,10 +40,15 @@ module "server" {
   image_id       = var.image_id
   ssh_key        = var.ssh_key
   compartment_id = var.compartment_id
+  private_ip = each.value.private_ip
   depends_on     = [module.network]
 }
 
 
 output "oracle_server_public_ip" {
   value = { for k, v in module.server : k => v.compute_public_ip }
+}
+
+output "oracle_server_private_ip" {
+  value = { for k, v in module.server : k => v.compute_private_ip }
 }
