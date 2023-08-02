@@ -26,3 +26,4 @@ module "azureservers" {
 output "azure_server_public_ip" {
   value = { for k, v in module.azureservers : k => v.public_ip }
 }
+
