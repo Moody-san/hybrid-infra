@@ -35,22 +35,11 @@ provider "oci" {
   alias  = "oci_us"
 }
 
-
-provider "azurerm" {
-  features {}
-  subscription_id = var.subscription_id_1
-  client_id       = var.client_id
-  client_secret   = var.client_secret
-  tenant_id       = var.tenant_id
-  alias           = "azure_ind"
-}
-
-
 provider "azurerm" {
   features {}
   subscription_id = var.subscription_id_2
   client_id       = var.client_id
   client_secret   = var.client_secret
   tenant_id       = var.tenant_id
-  alias           = "azure_ind_2"
+  alias           = "azure_st"
 }
