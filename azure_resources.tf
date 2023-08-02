@@ -1,26 +1,28 @@
-# module "azure_server_1" {
-#   source = "./Modules/Azure_Module"
-#   providers = {
-#     azurerm = azurerm.azure_ind
-#   }
-#   ssh_key = var.ssh_key
-#   pub_ip_type = "Dynamic"
-# }
+module "azurenetwork" {
+  source = "./Modules/Azure_Module/network"
+  providers = {
+    azurerm = azurerm.azure_st
+  }
+}
 
-# output "azure_server_public_ip_1" {
-#   value = module.azure_server_1.azure_server_public_ip
-# }
+module "azureservers" {
+  providers = {
+    azurerm = azurerm.azure_st
+  }
+  source          = "./Modules/Azure_Module/compute"
+  for_each        = { for server in var.azureservers : server.hostname => server }
+  hostname        = each.value.hostname
+  diskstoragegbs  = each.value.diskgb
+  diskstoragetype = each.value.disktype
+  vm_size         = each.value.vm_size
+  imagetype       = each.value.imagetype
+  ssh_key         = var.ssh_key
+  location        = module.azurenetwork.location
+  rgname          = module.azurenetwork.name
+  subnet_id       = module.azurenetwork.subnet_id
+  depends_on      = [module.azurenetwork]
+}
 
-# module "azure_server_2" {
-#   source = "./Modules/Azure_Module"
-#   providers = {
-#     azurerm = azurerm.azure_ind_2
-#   }
-#   ssh_key = var.ssh_key
-#   prefix = "azure_2"
-#   pub_ip_type = "Dynamic"
-# }
-
-# output "azure_server_public_ip_2" {
-#   value = module.azure_server_2.azure_server_public_ip
-# }
+output "azure_server_public_ip" {
+  value = { for k, v in module.azureservers : k => v.public_ip }
+}
