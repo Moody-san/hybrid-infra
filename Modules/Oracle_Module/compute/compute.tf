@@ -19,13 +19,12 @@ resource "oci_core_instance" "server" {
 
 
   create_vnic_details {
-    private_ip = var.private_ip
     assign_private_dns_record = true
-    display_name        = var.server_name
-    hostname_label = var.server_name
-    subnet_id        = var.subnet_id
-    skip_source_dest_check = true
-    assign_public_ip = true
+    display_name              = var.server_name
+    hostname_label            = var.server_name
+    subnet_id                 = var.subnet_id
+    skip_source_dest_check    = true
+    assign_public_ip          = true
   }
   source_details {
     source_type             = var.source_type
