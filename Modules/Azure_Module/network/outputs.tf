@@ -7,6 +7,9 @@ output "name" {
 }
 
 output "subnet_id" {
-  value = azurerm_subnet.internal.id
+  value = azurerm_subnet.applicationsubnet.id
 }
 
+output "vcnname" {
+  value = azurerm_virtual_network.azurevcn.name
+}

@@ -11,7 +11,7 @@ variable "vm_size" {
 }
 
 variable "prefix" {
-  default = "az"
+  default = "azure"
 }
 
 variable "username" {
@@ -20,10 +20,6 @@ variable "username" {
 
 variable "hostname" {
   default = "server"
-}
-
-variable "ssh_key" {
-
 }
 
 variable "source_image_reference" {
@@ -61,5 +57,9 @@ variable "subnet_id" {
 }
 
 variable "imagetype" {
+
+}
+
+variable "ssh_key" {
 
 }
