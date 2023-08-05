@@ -1,6 +1,5 @@
 module "oracle_inventory" {
   source = "./Modules/Inventory_Module"
-
   templatepath  = "../ansible-k8s-deployment/templates/oracleinventory.tpl"
   inventorypath = "../ansible-k8s-deployment/inventory/oracleinventory"
   cloudservers  = module.oracleservers
@@ -9,7 +8,6 @@ module "oracle_inventory" {
 
 module "azure_inventory" {
   source = "./Modules/Inventory_Module"
-
   templatepath  = "../ansible-k8s-deployment/templates/azureinventory.tpl"
   inventorypath = "../ansible-k8s-deployment/inventory/azureinventory"
   cloudservers  = module.azureservers

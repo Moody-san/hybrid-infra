@@ -1,24 +1,29 @@
-module "azure_server_1" {
-  source = "./Modules/Azure_Module"
+module "azurenetwork" {
+  source = "./Modules/Azure_Module/network"
   providers = {
-    azurerm = azurerm.azure_ind
+    azurerm = azurerm.azure_st
   }
-  ssh_key = var.ssh_key
 }
 
-output "azure_server_public_ip_1" {
-  value = module.azure_server_1.azure_server_public_ip
-}
-
-module "azure_server_2" {
-  source = "./Modules/Azure_Module"
+module "azureservers" {
   providers = {
-    azurerm = azurerm.azure_ind_2
+    azurerm = azurerm.azure_st
   }
-  ssh_key = var.ssh_key
-  prefix = "azure_2"
+  source          = "./Modules/Azure_Module/compute"
+  for_each        = { for server in var.azureservers : server.hostname => server }
+  hostname        = each.value.hostname
+  diskstoragegbs  = each.value.diskgb
+  diskstoragetype = each.value.disktype
+  vm_size         = each.value.vm_size
+  imagetype       = each.value.imagetype
+  ssh_key         = var.ssh_key
+  location        = module.azurenetwork.location
+  rgname          = module.azurenetwork.name
+  subnet_id       = module.azurenetwork.subnet_id
+  depends_on      = [module.azurenetwork]
 }
 
-output "azure_server_public_ip_2" {
-  value = module.azure_server_2.azure_server_public_ip
+output "azure_server_public_ip" {
+  value = { for k, v in module.azureservers : k => v.public_ip }
 }
+

@@ -1,17 +1,3 @@
-data "template_file" "cloud-config" {
-  template = <<YAML
-#cloud-config
-runcmd:
-  - sudo apt update -y
-  - sudo DEBIAN_FRONTEND='noninteractive' apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' upgrade
-  - sudo DEBIAN_FRONTEND='noninteractive' apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' dist-upgrade
-  - sudo apt-get autoremove -y
-  - sudo apt-get clean
-  - sudo apt-get autoclean
-  - sudo shutdown -r now 
-YAML
-}
-
 resource "oci_core_instance" "server" {
   availability_domain = var.AD
   compartment_id      = var.compartment_id
@@ -37,7 +23,6 @@ resource "oci_core_instance" "server" {
   }
   metadata = {
     ssh_authorized_keys = file(var.ssh_key)
-    user_data = "${base64encode(data.template_file.cloud-config.rendered)}"
   }
 }
 

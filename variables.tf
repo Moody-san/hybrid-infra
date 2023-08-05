@@ -1,4 +1,3 @@
-# variables to pass onto modules
 
 variable "ssh_key" {
 

@@ -17,27 +17,6 @@ resource "azurerm_subnet" "internal" {
   address_prefixes     = [var.cidr_ip_subnet]
 }
 
-resource "azurerm_public_ip" "azurepubip" {
-  name                = "${var.prefix}_pubip"
-  location            = azurerm_resource_group.azurerg.location
-  resource_group_name = azurerm_resource_group.azurerg.name
-  allocation_method   = var.pub_ip_type
-}
-
-resource "azurerm_network_interface" "azurenic" {
-  name                = "${var.prefix}_nic"
-  location            = azurerm_resource_group.azurerg.location
-  resource_group_name = azurerm_resource_group.azurerg.name
-
-  ip_configuration {
-    name                          = "${var.prefix}_ipconfig"
-    subnet_id                     = azurerm_subnet.internal.id
-    private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.azurepubip.id
-  }
-}
-
-
 resource "azurerm_network_security_group" "azurensg" {
   name                = "${var.prefix}_nsg"
   location            = azurerm_resource_group.azurerg.location
@@ -66,20 +45,6 @@ resource "azurerm_network_security_group" "azurensg" {
     destination_address_prefix = "*"
   }
 
-  # dynamic "security_rule" {
-  #   for_each = { for option in var.tcp_options : option.port => option }
-  #   content {
-  #     priority                   = security_rule.value.priority
-  #     name                       = "${var.prefix}_inbound_rule_${security_rule.value.port}"
-  #     direction                  = "Inbound"
-  #     access                     = "Allow"
-  #     protocol                   = "Tcp"
-  #     source_port_range          = "*"
-  #     destination_port_range     = security_rule.value.port
-  #     source_address_prefix      = "*"
-  #     destination_address_prefix = "*"
-  #   }
-  # }
 }
 
 resource "azurerm_subnet_network_security_group_association" "azurensgsubnet" {
