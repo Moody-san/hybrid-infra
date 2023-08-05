@@ -2,16 +2,19 @@ data "oci_identity_availability_domains" "ads" {
   compartment_id = var.compartment_id
 }
 
-variable "servers" {
-  default = ["1", "2", "3", "4"]
-}
-
-module "network" {
+module "oraclenetwork" {
+  providers = {
+    oci = oci.oci_us
+  }
   source         = "./Modules/Oracle_Module/network"
   compartment_id = var.compartment_id
+  AD             = data.oci_identity_availability_domains.ads.availability_domains[2]["name"]
 }
 
-module "server" {
+module "oracleservers" {
+  providers = {
+    oci = oci.oci_us
+  }
   source         = "./Modules/Oracle_Module/compute"
   for_each       = toset(var.servers)
   AD             = data.oci_identity_availability_domains.ads.availability_domains[2]["name"] // for ad=3
