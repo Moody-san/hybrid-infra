@@ -1,9 +1,9 @@
 #Network variables
 variable "cidr_ip_block" {
-  default = "11.0.0.0/16"
+  default = "10.0.0.0/16"
 }
 variable "vcn_name" {
-  default = "vcn1"
+  default = "vcn"
 }
 variable "internet_gateway_name" {
   default = "igw"
@@ -14,11 +14,12 @@ variable "route_table_name" {
 variable "destination_ip" {
   default = "0.0.0.0/0"
 }
+
 variable "subnet_name" {
-  default = "subnet"
+  default = "appsubnet"
 }
-variable "subnet_ip" {
-  default = "11.0.1.0/24"
+variable "applicationsubnet_ip" {
+  default = "10.0.1.0/24"
 }
 variable "security_list_name" {
   default = "sl"
@@ -35,16 +36,13 @@ variable "ingress_rules" {
     source   = "0.0.0.0/0"
   }
 }
-# variable "ingress_ports" {
-#   default = [22, 80, 443]
-# }
-# variable "icmp_ingress_rules" {
-#   default = {
-#     protocol = "1"
-#     source   = "0.0.0.0/0"
-#     type     = 8
-#   }
-# }
 
 variable "compartment_id" {
+}
+
+variable "AD" {
+}
+
+variable "azure_ipcidr" {
+  default = "192.0.0.0/16"
 }

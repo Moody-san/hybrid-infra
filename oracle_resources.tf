@@ -3,11 +3,18 @@ data "oci_identity_availability_domains" "ads" {
 }
 
 module "oraclenetwork" {
+  providers = {
+    oci = oci.oci_us
+  }
   source         = "./Modules/Oracle_Module/network"
   compartment_id = var.compartment_id
+  AD             = data.oci_identity_availability_domains.ads.availability_domains[2]["name"]
 }
 
 module "oracleservers" {
+  providers = {
+    oci = oci.oci_us
+  }
   source         = "./Modules/Oracle_Module/compute"
   for_each       = { for server in var.oracleservers : server.display_name => server }
   cpu            = each.value.cpu

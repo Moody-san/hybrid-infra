@@ -20,14 +20,18 @@ resource "oci_core_route_table" "prt" {
     destination       = var.destination_ip
     network_entity_id = oci_core_internet_gateway.igw.id
   }
+  route_rules {
+    destination       = var.azure_ipcidr
+    network_entity_id = oci_core_drg.drg.id
+  }
 }
 
 resource "oci_core_subnet" "subnet" {
-  availability_domain        = ""
+  availability_domain        = var.AD
   compartment_id             = var.compartment_id
   display_name               = var.subnet_name
   vcn_id                     = oci_core_vcn.vcn.id
-  cidr_block                 = var.subnet_ip
+  cidr_block                 = var.applicationsubnet_ip
   route_table_id             = oci_core_route_table.prt.id
   security_list_ids          = [oci_core_security_list.securitylist.id]
   prohibit_public_ip_on_vnic = false
@@ -45,16 +49,12 @@ resource "oci_core_dhcp_options" "test_dhcp_options" {
 
   options {
     type                = "SearchDomain"
-    search_domain_names = ["subnet.vcn1.oraclevcn.com"]
+    search_domain_names = ["${var.subnet_name}.${var.vcn_name}.oraclevcn.com"]
   }
 
-  vcn_id = oci_core_vcn.vcn.id
-
-  #Optional
+  vcn_id       = oci_core_vcn.vcn.id
   display_name = "customdhcp"
 }
-
-
 
 resource "oci_core_security_list" "securitylist" {
 
@@ -67,22 +67,24 @@ resource "oci_core_security_list" "securitylist" {
     destination = var.egress_rules.destination
   }
 
-  # dynamic "ingress_security_rules" {
-  #   for_each = toset(var.ingress_ports)
-  #   content {
-  #     protocol = var.tcp_ingress_rules.protocol
-  #     source   = var.tcp_ingress_rules.source
-  #     tcp_options {
-  #       min = ingress_security_rules.value
-  #       max = ingress_security_rules.value
-  #     }
-  #   }
-  # }
-
-
   ingress_security_rules {
     protocol = var.ingress_rules.protocol
     source   = var.ingress_rules.source
 
+  }
+}
+
+#for vpn
+
+# create and attach drg
+resource "oci_core_drg" "drg" {
+  compartment_id = var.compartment_id
+}
+
+resource "oci_core_drg_attachment" "vcndrgattachment" {
+  drg_id = oci_core_drg.drg.id
+  network_details {
+    id   = oci_core_vcn.vcn.id
+    type = "VCN"
   }
 }
