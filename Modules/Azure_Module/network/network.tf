@@ -1,24 +1,24 @@
 resource "azurerm_resource_group" "azurerg" {
-  name     = "${var.prefix}_rg"
+  name     = "${var.prefix}rg"
   location = var.region
 }
 
 resource "azurerm_virtual_network" "azurevcn" {
-  name                = "${var.prefix}_vcn"
+  name                = "${var.prefix}vcn"
   address_space       = [var.cidr_ip_block]
   location            = azurerm_resource_group.azurerg.location
   resource_group_name = azurerm_resource_group.azurerg.name
 }
 
-resource "azurerm_subnet" "internal" {
-  name                 = "internal"
+resource "azurerm_subnet" "applicationsubnet" {
+  name                 = "applicationsubnet"
   resource_group_name  = azurerm_resource_group.azurerg.name
   virtual_network_name = azurerm_virtual_network.azurevcn.name
   address_prefixes     = [var.cidr_ip_subnet]
 }
 
 resource "azurerm_network_security_group" "azurensg" {
-  name                = "${var.prefix}_nsg"
+  name                = "application-nsg"
   location            = azurerm_resource_group.azurerg.location
   resource_group_name = azurerm_resource_group.azurerg.name
 
@@ -48,6 +48,6 @@ resource "azurerm_network_security_group" "azurensg" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "azurensgsubnet" {
-  subnet_id                 = azurerm_subnet.internal.id
+  subnet_id                 = azurerm_subnet.applicationsubnet.id
   network_security_group_id = azurerm_network_security_group.azurensg.id
 }
