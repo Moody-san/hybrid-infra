@@ -2,24 +2,26 @@
 variable "ssh_key" {
 
 }
-variable "compartment_id" {
+variable "oci_compartment_id" {
 
 }
-variable "image_id" {
+variable "oci_image_id" {
 
 }
-variable "subscription_id_1" {
+
+variable "oci_dbimage_id" {
 
 }
-variable "subscription_id_2" {
+
+variable "az_subscription_id" {
 
 }
-variable "client_id" {
+variable "az_client_id" {
 
 }
-variable "client_secret" {
+variable "az_client_secret" {
 
 }
-variable "tenant_id" {
+variable "az_tenant_id" {
 
 }

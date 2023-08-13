@@ -35,3 +35,9 @@ terraform.rc
 
 #lock
 .terraform.lock.hcl
+
+#ignore node deps
+**/node_modules/
+**/package-lock.json
+**/script.js
+
