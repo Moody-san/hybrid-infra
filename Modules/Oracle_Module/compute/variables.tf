@@ -5,7 +5,7 @@ variable "source_type" {
   default = "image"
 }
 
-variable "image_shape" {
+variable "vm_shape" {
   default = "VM.Standard.A1.Flex"
 }
 

@@ -1,7 +1,7 @@
 resource "oci_core_instance" "server" {
   availability_domain = var.AD
   compartment_id      = var.compartment_id
-  shape               = var.image_shape
+  shape               = var.vm_shape
 
 
   create_vnic_details {
