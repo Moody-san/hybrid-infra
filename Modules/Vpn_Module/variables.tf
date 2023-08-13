@@ -25,3 +25,4 @@ variable "azurergname" {
 variable "azurevcnname" {
 
 }
+

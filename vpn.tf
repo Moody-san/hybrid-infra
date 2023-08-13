@@ -4,7 +4,7 @@ module "oci-azure-vpn" {
     oci     = oci.oci_us
   }
   source            = "./Modules/Vpn_Module"
-  ocicompartment_id = var.compartment_id
+  ocicompartment_id = var.oci_compartment_id
   drgid             = module.oraclenetwork.drgid
   azurelocation     = module.azurenetwork.location
   azurergname       = module.azurenetwork.name
