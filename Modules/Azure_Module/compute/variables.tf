@@ -22,9 +22,9 @@ variable "hostname" {
   default = "server"
 }
 
-variable "source_image_reference" {
-  default = {
-    offer     = "0001-com-ubuntu-server-jammy"
+locals {
+  source_image_reference= {
+    offer     = "0001-com-ubuntu-server-${var.imagename}"
     publisher = "Canonical"
     version   = "latest"
   }
@@ -63,3 +63,8 @@ variable "imagetype" {
 variable "ssh_key" {
 
 }
+
+variable "imagename" {
+
+}
+
