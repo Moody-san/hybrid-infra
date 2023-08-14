@@ -6,10 +6,10 @@ resource "azurerm_linux_virtual_machine" "main" {
   network_interface_ids = [azurerm_network_interface.azurenic.id]
 
   source_image_reference {
-    offer     = var.source_image_reference.offer
-    publisher = var.source_image_reference.publisher
+    offer     = local.source_image_reference.offer
+    publisher = local.source_image_reference.publisher
     sku       = var.imagetype
-    version   = var.source_image_reference.version
+    version   = local.source_image_reference.version
   }
   os_disk {
     name                 = "${var.os_disk.name}${var.hostname}"

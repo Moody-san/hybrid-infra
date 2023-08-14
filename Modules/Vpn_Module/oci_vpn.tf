@@ -31,21 +31,21 @@ resource "null_resource" "compile_script" {
     value = "runs only once"
   }
   provisioner "local-exec" {
-    command = "tsc script.ts"
-    working_dir = "./oci_vpn_advance_config" 
+    command     = "tsc script.ts"
+    working_dir = "./oci_vpn_advance_config"
   }
 }
 
 resource "null_resource" "ip_sec_connection_tunnel_configuration" {
   triggers = {
-    value = null_resource.compile_script.id
-    value2=oci_core_ipsec.ip_sec_connection.id
+    value  = null_resource.compile_script.id
+    value2 = oci_core_ipsec.ip_sec_connection.id
   }
-  depends_on = [oci_core_ipsec.ip_sec_connection,null_resource.compile_script]
-  for_each  = { for tunnel in local.tunnel_bgp_ips : tunnel.index => tunnel }
+  depends_on = [oci_core_ipsec.ip_sec_connection, null_resource.compile_script]
+  for_each   = { for tunnel in local.tunnel_bgp_ips : tunnel.index => tunnel }
   provisioner "local-exec" {
     working_dir = "./oci_vpn_advance_config"
-    command = "sleep ${each.value.index*5} && npm run script -- ${oci_core_ipsec.ip_sec_connection.id} ${data.oci_core_ipsec_connection_tunnels.created_ip_sec_connection_tunnels.ip_sec_connection_tunnels[each.value.index].id} ${each.value.oip}${each.value.mask} ${each.value.cip}${each.value.mask}"
+    command     = "sleep ${each.value.index * 5} && npm run script -- ${oci_core_ipsec.ip_sec_connection.id} ${data.oci_core_ipsec_connection_tunnels.created_ip_sec_connection_tunnels.ip_sec_connection_tunnels[each.value.index].id} ${each.value.oip}${each.value.mask} ${each.value.cip}${each.value.mask}"
   }
 }
 
