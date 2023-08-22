@@ -3,8 +3,8 @@ module "oracle_inventory" {
   k8stemplatepath  = "../ansible-k8s-deployment/templates/oracleinventory.tpl"
   k8sinventorypath = "../ansible-k8s-deployment/inventory/oracleinventory"
 
-  cloudservers     = module.oracleservers
-  depends_on       = [module.oracleservers]
+  cloudservers = module.oracleservers
+  depends_on   = [module.oracleservers]
 }
 
 module "azure_inventory" {
@@ -16,10 +16,10 @@ module "azure_inventory" {
 }
 
 module "db_inventory" {
-  source           = "./Modules/Inventory_Module/dbinventory"
+  source          = "./Modules/Inventory_Module/dbinventory"
   dbtemplatepath  = "../ansible-couchdb-deployment/templates/inventory.tpl"
   dbinventorypath = "../ansible-couchdb-deployment/inventory/inventory"
   azureservers    = module.azureservers
-  oracleservers     = module.oracleservers
-  depends_on       = [module.azureservers,module.oracleservers]
+  oracleservers   = module.oracleservers
+  depends_on      = [module.azureservers, module.oracleservers]
 }

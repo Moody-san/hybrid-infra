@@ -31,3 +31,14 @@ module "oracleservers" {
 output "oracle_server_public_ip" {
   value = { for k, v in module.oracleservers : k => v.public_ip }
 }
+
+
+module "oracleloadbalancer" {
+  providers = {
+    oci = oci.oci_us
+  }
+  source         = "./Modules/Oracle_Module/loadbalancer"
+  subnet_id      = module.oraclenetwork.subnet_id
+  compartment_id = var.oci_compartment_id
+  depends_on     = [module.oraclenetwork]
+}

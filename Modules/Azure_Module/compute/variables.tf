@@ -23,7 +23,7 @@ variable "hostname" {
 }
 
 locals {
-  source_image_reference= {
+  source_image_reference = {
     offer     = "0001-com-ubuntu-server-${var.imagename}"
     publisher = "Canonical"
     version   = "latest"
