@@ -21,24 +21,15 @@ module "oracleservers" {
   memory         = each.value.memory
   AD             = data.oci_identity_availability_domains.ads.availability_domains[2]["name"] // for ad=3
   server_name    = each.value.display_name
-  subnet_id      = module.oraclenetwork.subnet_id
+  subnet_id      = each.value.subnet_id
   ssh_key        = var.ssh_key
   compartment_id = var.oci_compartment_id
   image_id       = each.value.image
+  boot_volume = each.value.boot_volume
+  assign_public_ip = each.value.assign_public_ip
   depends_on     = [module.oraclenetwork]
 }
 
-output "oracle_server_public_ip" {
-  value = { for k, v in module.oracleservers : k => v.public_ip }
-}
-
-
-module "oracleloadbalancer" {
-  providers = {
-    oci = oci.oci_us
-  }
-  source         = "./Modules/Oracle_Module/loadbalancer"
-  subnet_id      = module.oraclenetwork.subnet_id
-  compartment_id = var.oci_compartment_id
-  depends_on     = [module.oraclenetwork]
+output "names" {
+  value = module.oracleservers
 }

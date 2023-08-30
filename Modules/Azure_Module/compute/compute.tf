@@ -1,5 +1,5 @@
 resource "azurerm_linux_virtual_machine" "main" {
-  name                  = "${var.prefix}${var.hostname}vm"
+  name                  = "${var.hostname}"
   location              = var.location
   resource_group_name   = var.rgname
   size                  = var.vm_size
@@ -12,7 +12,7 @@ resource "azurerm_linux_virtual_machine" "main" {
     version   = local.source_image_reference.version
   }
   os_disk {
-    name                 = "${var.os_disk.name}${var.hostname}"
+    name                 = "${var.hostname}-${var.os_disk.name}"
     caching              = var.os_disk.caching
     storage_account_type = var.diskstoragetype
     disk_size_gb         = var.diskstoragegbs

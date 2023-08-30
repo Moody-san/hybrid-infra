@@ -1,4 +1,3 @@
-#to avoid circular dependency created drg in oraclenetwork
 
 # create cpe add azure vpn gateway public ip
 
@@ -13,7 +12,7 @@ resource "oci_core_ipsec" "ip_sec_connection" {
   compartment_id = var.ocicompartment_id
   cpe_id         = oci_core_cpe.cpe.id
   drg_id         = var.drgid
-  static_routes  = ["0.0.0.0/0"] # temporary
+  static_routes  = ["0.0.0.0/0"] # temporary will edit to bgp from script
 }
 
 data "oci_core_ipsec_connection_tunnels" "created_ip_sec_connection_tunnels" {
@@ -45,7 +44,7 @@ resource "null_resource" "ip_sec_connection_tunnel_configuration" {
   for_each   = { for tunnel in local.tunnel_bgp_ips : tunnel.index => tunnel }
   provisioner "local-exec" {
     working_dir = "./oci_vpn_advance_config"
-    command     = "sleep ${each.value.index * 5} && npm run script -- ${oci_core_ipsec.ip_sec_connection.id} ${data.oci_core_ipsec_connection_tunnels.created_ip_sec_connection_tunnels.ip_sec_connection_tunnels[each.value.index].id} ${each.value.oip}${each.value.mask} ${each.value.cip}${each.value.mask}"
+    command     = "npm run script -- ${oci_core_ipsec.ip_sec_connection.id} ${data.oci_core_ipsec_connection_tunnels.created_ip_sec_connection_tunnels.ip_sec_connection_tunnels[each.value.index].id} ${each.value.oip}${each.value.mask} ${each.value.cip}${each.value.mask}"
   }
 }
 
