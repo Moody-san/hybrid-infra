@@ -5,11 +5,15 @@ variable "ssh_key" {
 variable "oci_compartment_id" {
 
 }
-variable "oci_image_id" {
+variable "oci_ubuntu22_id" {
 
 }
 
-variable "oci_dbimage_id" {
+variable "oci_ubuntu20_id" {
+
+}
+
+variable "oci_oraclelinux8_id" {
 
 }
 

@@ -1,29 +1,40 @@
 #Network variables
-variable "cidr_ip_block" {
-  default = "10.0.0.0/16"
-}
-variable "vcn_name" {
-  default = "vcn"
-}
-variable "internet_gateway_name" {
-  default = "igw"
-}
-variable "route_table_name" {
-  default = "prt"
-}
-variable "destination_ip" {
-  default = "0.0.0.0/0"
+variable "vcn" {
+  default = {
+    name = "vcn"
+    cidr = "10.0.0.0/16"
+  }
 }
 
-variable "subnet_name" {
-  default = "appsubnet"
+variable "internet_gateway" {
+  default = {
+    name = "igw"
+    destination_ip = "0.0.0.0/0"
+  }
 }
-variable "applicationsubnet_ip" {
-  default = "10.0.1.0/24"
+
+variable "nat_gateway" {
+  default = {
+    name = "ngw"
+    destination_ip = "0.0.0.0/0"
+  }
 }
-variable "security_list_name" {
-  default = "sl"
+
+variable "privatesubnet" {
+  default = {
+    name = "privatesubnet",
+    ip = "10.0.1.0/24"
+  }
 }
+
+variable "pubsubnet" {
+  default = {
+    name = "pubsubnet",
+    ip = "10.0.3.0/24"
+  }
+}
+
+
 variable "egress_rules" {
   default = {
     protocol    = "all"

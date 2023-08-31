@@ -1,31 +1,24 @@
 
 #Compute Variables
 
-variable "source_type" {
-  default = "image"
-}
-
 variable "vm_shape" {
   default = "VM.Standard.A1.Flex"
 }
 
-
+variable "assign_public_ip" {
+  default = "false"
+}
 variable "boot_volume" {
-  default = "50"
 }
 
 variable "cpu" {
-  default = "1"
 }
 
 variable "memory" {
-  default = "6"
 }
 
 variable "server_name" {
-  default = "server"
 }
-
 
 variable "ssh_key" {
 }

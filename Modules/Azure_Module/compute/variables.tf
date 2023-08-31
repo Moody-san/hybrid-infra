@@ -1,17 +1,5 @@
-variable "pub_ip_type" {
-  default = "Dynamic"
-}
-
-variable "pvt_ip_type" {
-  default = "Dynamic"
-}
-
 variable "vm_size" {
   default = "Standard_B1s"
-}
-
-variable "prefix" {
-  default = "azure"
 }
 
 variable "username" {
@@ -31,7 +19,7 @@ locals {
 }
 variable "os_disk" {
   default = {
-    name    = "myosdisk"
+    name    = "osdisk"
     caching = "ReadWrite"
   }
 }

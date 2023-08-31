@@ -1,10 +1,45 @@
-#need to attach seperate security list
-resource "azurerm_subnet" "gatewaysubnet" {
+resource "azurerm_subnet" "azurevpngatewaysubnet" {
   name                 = "gatewaysubnet"
   resource_group_name  = var.azurergname
   virtual_network_name = var.azurevcnname
   address_prefixes     = [var.azuregatewaysubnetcidr]
 }
+
+resource "azurerm_network_security_group" "vpngwsubnetnsg" {
+  name                = "vpngwsubnet-nsg"
+  location            = var.azurelocation
+  resource_group_name = var.azurergname
+
+  security_rule {
+    name                       = "ingress_rules_all_allowed"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+  security_rule {
+    priority                   = 100
+    name                       = "egress_rules_all_allowed"
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+}
+
+resource "azurerm_subnet_network_security_group_association" "nsgsubnetassociation" {
+  subnet_id                 = azurerm_subnet.azurevpngatewaysubnet.id
+  network_security_group_id = azurerm_network_security_group.vpngwsubnetnsg.id
+}
+
 
 resource "azurerm_public_ip" "azurevpngwpubip" {
   name                = "azurevpngwpubip"
@@ -35,7 +70,7 @@ resource "azurerm_virtual_network_gateway" "azurevpn" {
     name                          = "GatewayipConfig"
     public_ip_address_id          = azurerm_public_ip.azurevpngwpubip.id
     private_ip_address_allocation = "Dynamic"
-    subnet_id                     = azurerm_subnet.gatewaysubnet.id
+    subnet_id                     = azurerm_subnet.azurevpngatewaysubnet.id
   }
 
   bgp_settings {

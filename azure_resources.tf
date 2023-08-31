@@ -19,12 +19,12 @@ module "azureservers" {
   ssh_key         = var.ssh_key
   location        = module.azurenetwork.location
   rgname          = module.azurenetwork.name
-  subnet_id       = module.azurenetwork.subnet_id
+  subnet_id       = module.azurenetwork.azureprivatesubnet_id
   imagename       = each.value.imagename
   depends_on      = [module.azurenetwork]
 }
 
 output "azure_server_public_ip" {
-  value = { for k, v in module.azureservers : k => v.public_ip }
+  value = module.azureservers
 }
 
