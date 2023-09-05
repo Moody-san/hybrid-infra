@@ -1,9 +1,23 @@
+data "template_file" "cloud-config" {
+  template = <<YAML
+runcmd:
+  - sudo apt update -y
+  - sudo DEBIAN_FRONTEND='noninteractive' apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' upgrade
+  - sudo DEBIAN_FRONTEND='noninteractive' apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' dist-upgrade
+  - sudo apt-get autoremove -y
+  - sudo apt-get clean
+  - sudo apt-get autoclean
+  - sudo shutdown -r now 
+YAML
+}
+
 resource "azurerm_linux_virtual_machine" "main" {
   name                  = "${var.hostname}"
   location              = var.location
   resource_group_name   = var.rgname
   size                  = var.vm_size
   network_interface_ids = [azurerm_network_interface.azurenic.id]
+  user_data ="${base64encode(data.template_file.cloud-config.rendered)}"
 
   source_image_reference {
     offer     = local.source_image_reference.offer

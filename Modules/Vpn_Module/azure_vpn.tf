@@ -5,41 +5,6 @@ resource "azurerm_subnet" "azurevpngatewaysubnet" {
   address_prefixes     = [var.azuregatewaysubnetcidr]
 }
 
-resource "azurerm_network_security_group" "vpngwsubnetnsg" {
-  name                = "vpngwsubnet-nsg"
-  location            = var.azurelocation
-  resource_group_name = var.azurergname
-
-  security_rule {
-    name                       = "ingress_rules_all_allowed"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-  security_rule {
-    priority                   = 100
-    name                       = "egress_rules_all_allowed"
-    direction                  = "Outbound"
-    access                     = "Allow"
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-
-}
-
-resource "azurerm_subnet_network_security_group_association" "nsgsubnetassociation" {
-  subnet_id                 = azurerm_subnet.azurevpngatewaysubnet.id
-  network_security_group_id = azurerm_network_security_group.vpngwsubnetnsg.id
-}
-
 
 resource "azurerm_public_ip" "azurevpngwpubip" {
   name                = "azurevpngwpubip"
