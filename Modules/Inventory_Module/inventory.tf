@@ -24,7 +24,7 @@ resource "null_resource" "add_bastion_fingerprint_to_known_hosts" {
 resource "null_resource" "add_oracleservers_fingerprint_to_tmp" {
   count = length(local.oracleips)
   triggers = {
-    always_run = timestamp() 
+    always_run = timestamp()
   }
   depends_on = [null_resource.add_bastion_fingerprint_to_known_hosts]
 
