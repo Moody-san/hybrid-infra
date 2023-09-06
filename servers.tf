@@ -51,14 +51,6 @@ variable "azureservers" {
       imagename = "jammy"
     },
     {
-      hostname  = "azureworker"
-      diskgb    = 32
-      disktype  = "Standard_LRS"
-      vm_size   = "Standard_B2s"
-      imagetype = "22_04-lts-gen2"
-      imagename = "jammy"
-    },
-    {
       hostname  = "azuredb"
       diskgb    = 64
       disktype  = "Premium_LRS"
