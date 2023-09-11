@@ -40,23 +40,23 @@ locals {
 }
 
 
-variable "azureservers" {
-  default = [
-    {
-      hostname  = "azuremaster"
-      diskgb    = 64
-      disktype  = "Premium_LRS"
-      vm_size   = "Standard_B2s"
-      imagetype = "22_04-lts-gen2"
-      imagename = "jammy"
-    },
-    {
-      hostname  = "azuredb"
-      diskgb    = 64
-      disktype  = "Premium_LRS"
-      vm_size   = "Standard_B2s"
-      imagetype = "20_04-lts-gen2"
-      imagename = "focal"
-    }
-  ]
-}
+# variable "azureservers" {
+#   default = [
+#     {
+#       hostname  = "azuremaster"
+#       diskgb    = 64
+#       disktype  = "Premium_LRS"
+#       vm_size   = "Standard_B2s"
+#       imagetype = "22_04-lts-gen2"
+#       imagename = "jammy"
+#     },
+#     {
+#       hostname  = "azuredb"
+#       diskgb    = 64
+#       disktype  = "Premium_LRS"
+#       vm_size   = "Standard_B2s"
+#       imagetype = "20_04-lts-gen2"
+#       imagename = "focal"
+#     }
+#   ]
+# }
