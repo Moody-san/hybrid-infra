@@ -1,7 +1,4 @@
-
 # create cpe add azure vpn gateway public ip
-
-
 resource "oci_core_cpe" "cpe" {
   compartment_id = var.ocicompartment_id
   ip_address     = data.azurerm_public_ip.gwip.ip_address
