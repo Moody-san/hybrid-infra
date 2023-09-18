@@ -26,3 +26,6 @@ variable "azurevcnname" {
 
 }
 
+variable aws_vpc_id {
+  
+}

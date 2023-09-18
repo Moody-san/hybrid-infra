@@ -48,3 +48,10 @@ resource "null_resource" "ip_sec_connection_tunnel_configuration" {
 output "drgid" {
   value = var.drgid
 }
+
+data "oci_core_ipsec_connection_tunnels" "created_ip_sec_connection_tunnels" {
+  ipsec_id = oci_core_ipsec.ip_sec_connection.id
+}
+output "first_tunnel_details" {
+  value = data.oci_core_ipsec_connection_tunnels.created_ip_sec_connection_tunnels.ip_sec_connection_tunnels[0]
+}
