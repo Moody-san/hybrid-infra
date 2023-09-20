@@ -110,3 +110,8 @@ output "tunnel2_preshared_key" {
   "")
   sensitive = true
 }
+
+
+output "first_tunnel_oci_ip_address" {
+  value = data.oci_core_ipsec_connection_tunnels.created_ip_sec_connection_tunnels.ip_sec_connection_tunnels[0].public_ip_address
+}

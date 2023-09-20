@@ -1,6 +1,11 @@
 resource "oci_core_cpe" "cpe" {
   compartment_id = var.ocicompartment_id
-  ip_address     = "AWS_VGW_PUBLIC_IP"  # Replace this with one of the AWS VGW public IPs
+  ip_address     = try(
+    aws_vpn_connection.default[0].tunnel1_address,
+    aws_vpn_connection.tunnel[0].tunnel1_address,
+    aws_vpn_connection.preshared[0].tunnel1_address,
+    aws_vpn_connection.tunnel_preshared[0].tunnel1_address,
+  "")
 }
 
 # create ipsec con
@@ -37,11 +42,11 @@ resource "null_resource" "ip_sec_connection_tunnel_configuration" {
   depends_on = [oci_core_ipsec.ip_sec_connection, null_resource.compile_script]
   provisioner "local-exec" {
     working_dir = "./oci_vpn_advance_config"
-    command     = "npm run script -- ${oci_core_ipsec.ip_sec_connection.id} ${data.oci_core_ipsec_connection_tunnels.created_ip_sec_connection_tunnels.ip_sec_connection_tunnels[0].id} ${local.tunnel_bgp_ips[0].oip}${local.tunnel_bgp_ips[0].mask} ${local.tunnel_bgp_ips[0].cip}${local.tunnel_bgp_ips[0].mask}"
+    command     = "npm run script -- ${oci_core_ipsec.ip_sec_connection.id} ${data.oci_core_ipsec_connection_tunnels.created_ip_sec_connection_tunnels.ip_sec_connection_tunnels[0].id} ${local.tunnel_bgp_ips[0].oip}${local.tunnel_bgp_ips[0].mask} ${local.tunnel_bgp_ips[0].cip}${local.tunnel_bgp_ips[0].mask} AWS"
   }
   provisioner "local-exec" {
     working_dir = "./oci_vpn_advance_config"
-    command     = "npm run script -- ${oci_core_ipsec.ip_sec_connection.id} ${data.oci_core_ipsec_connection_tunnels.created_ip_sec_connection_tunnels.ip_sec_connection_tunnels[1].id} ${local.tunnel_bgp_ips[1].oip}${local.tunnel_bgp_ips[1].mask} ${local.tunnel_bgp_ips[1].cip}${local.tunnel_bgp_ips[1].mask}"
+    command     = "npm run script -- ${oci_core_ipsec.ip_sec_connection.id} ${data.oci_core_ipsec_connection_tunnels.created_ip_sec_connection_tunnels.ip_sec_connection_tunnels[1].id} ${local.tunnel_bgp_ips[1].oip}${local.tunnel_bgp_ips[1].mask} ${local.tunnel_bgp_ips[1].cip}${local.tunnel_bgp_ips[1].mask} AWS"
   }
 }
 
@@ -49,9 +54,5 @@ output "drgid" {
   value = var.drgid
 }
 
-data "oci_core_ipsec_connection_tunnels" "created_ip_sec_connection_tunnels" {
-  ipsec_id = oci_core_ipsec.ip_sec_connection.id
-}
-output "first_tunnel_details" {
-  value = data.oci_core_ipsec_connection_tunnels.created_ip_sec_connection_tunnels.ip_sec_connection_tunnels[0]
-}
+
+

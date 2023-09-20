@@ -2,7 +2,6 @@ import * as core from "oci-core";
 import common = require("oci-common");
 
 const provider: common.ConfigFileAuthenticationDetailsProvider = new common.ConfigFileAuthenticationDetailsProvider();
-
 (async () => {
   try {
     const client = new core.VirtualNetworkClient({ authenticationDetailsProvider: provider });
@@ -10,9 +9,10 @@ const provider: common.ConfigFileAuthenticationDetailsProvider = new common.Conf
     const tunnelId = process.argv[3];
     const oracleIp = process.argv[4];    
     const customerIp = process.argv[5];
+    const provider_type = process.argv[6];
 
-    if (!ipsecId || !tunnelId ||!oracleIp ||!customerIp) {
-      console.error("Usage: node script.js <IPSec_ID> <Tunnel_ID> <oracleIp> <customerIp>");
+    if (!ipsecId || !tunnelId ||!oracleIp ||!customerIp || !provider_type) {
+      console.error("Usage: node script.js <IPSec_ID> <Tunnel_ID> <oracleIp> <customerIp> <provider>");
       return;
     }
     const updateIPSecConnectionTunnelDetails = {
@@ -21,7 +21,7 @@ const provider: common.ConfigFileAuthenticationDetailsProvider = new common.Conf
       bgpSessionConfig: {
         oracleInterfaceIp: oracleIp,
         customerInterfaceIp: customerIp,
-        customerBgpAsn: "65515"
+        customerBgpAsn: provider_type == "AWS" ? "64512" : "65515"
       },
       oracleInitiation:
         core.models.UpdateIPSecConnectionTunnelDetails.OracleInitiation.InitiatorOrResponder,
@@ -53,7 +53,7 @@ const provider: common.ConfigFileAuthenticationDetailsProvider = new common.Conf
       updateIPSecConnectionTunnelDetails: updateIPSecConnectionTunnelDetails,
     };
 
-    const updateIPSecConnectionTunnelResponse = await client.updateIPSecConnectionTunnel(
+     await client.updateIPSecConnectionTunnel(
       updateIPSecConnectionTunnelRequest
     );
 

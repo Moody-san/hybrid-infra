@@ -1,17 +1,13 @@
-# module "oci-azure-vpn" {
-#   providers = {
-#     azurerm = azurerm.azure_st
-#     oci     = oci.oci_us
-#   }
-#   source            = "./Modules/Vpn_Module"
-#   ocicompartment_id = var.oci_compartment_id
-#   drgid             = module.oraclenetwork.ocidrgid
-#   azurelocation     = module.azurenetwork.location
-#   azurergname       = module.azurenetwork.name
-#   azurevcnname      = module.azurenetwork.vcnname
-#   depends_on        = [module.oraclenetwork, module.azurenetwork]
-# }
+resource "random_string" "psk" {
+  length  = 16
+  special = true
+  upper   = true
+  lower   = true
+  number  = true
 
+  // Provide a list of special characters that doesn't include '.' and '_'
+  override_special = " [email protected]#$%^&*()-+=<>?!"
+}
 resource "aws_vpn_gateway" "gateway" {
   vpc_id            = module.aws_server.vpc_id
   tags = merge(
@@ -37,7 +33,9 @@ module "oci-aws-vpn" {
     drgid = module.oraclenetwork.ocidrgid
     ocicompartment_id = var.oci_compartment_id
     vpn_gateway_id = aws_vpn_gateway.gateway.id
-
+    customer_gateway_id = aws_customer_gateway.main.id
+    tunnel1_preshared_key = random_string.psk.result
+    tunnel2_preshared_key = random_string.psk.result
     depends_on        = [module.oraclenetwork, module.aws_server]
 }
 
@@ -48,4 +46,16 @@ module "aws_server" {
         aws = aws.us
     }
 
+}
+
+
+
+resource "null_resource" "update_aws_customer_gateway" {
+  provisioner "local-exec" {
+    command = "aws ec2 modify-customer-gateway --customer-gateway-id ${aws_customer_gateway.main.id} --ip-address ${self.triggers["oci_vpn_tunnel1_ip"]}"
+  }
+
+  triggers = {
+    oci_vpn_tunnel1_ip = module.oci-aws-vpn.first_tunnel_oci_ip_address
+  }
 }
