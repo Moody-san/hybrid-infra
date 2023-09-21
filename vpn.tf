@@ -1,12 +1,6 @@
 resource "random_string" "psk" {
   length  = 16
-  special = true
-  upper   = true
-  lower   = true
-  number  = true
-
-  // Provide a list of special characters that doesn't include '.' and '_'
-  override_special = " [email protected]#$%^&*()-+=<>?!"
+  special = false
 }
 resource "aws_vpn_gateway" "gateway" {
   vpc_id            = module.aws_server.vpc_id
