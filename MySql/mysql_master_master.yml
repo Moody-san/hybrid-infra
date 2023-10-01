@@ -1,0 +1,60 @@
+---
+- name: Setup MySQL Master-Master Replication
+  hosts: db_servers
+  become: yes
+
+  tasks:
+    - name: Install MySQL Server
+      apt:
+        name: mysql-server
+        state: present
+
+    - name: Copy MySQL config file
+      copy:
+        src: master_master.cnf
+        dest: /etc/mysql/mysql.conf.d/master_master.cnf
+
+    - name: Restart MySQL Service
+      service:
+        name: mysql
+        state: restarted
+
+    - name: Set MySQL root password
+      mysql_user:
+        name: root
+        password: "{{ mysql_root_password }}"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Create replication user
+      mysql_user:
+        name: "{{ replication_user }}"
+        password: "{{ replication_password }}"
+        host: "{{ replication_host }}"
+        priv: "*.*:REPLICATION SLAVE"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Retrieve master log file and position
+      mysql_replication: 
+        mode: get_master
+      register: replication_status
+
+    - name: Enable Master Log
+      mysql_replication:
+        mode: change_master
+        master_host: "{{ replication_host }}"
+        master_user: "{{ replication_user }}"
+        master_password: "{{ replication_password }}"
+        master_log_file: "{{ replication_status.Master_Log_File }}"
+        master_log_pos: "{{ replication_status.Read_Master_Log_Pos }}"
+
+    - name: Start Slave
+      mysql_replication:
+        mode: start_slave
+
+    - name: Grant privileges to replication user
+      mysql_user:
+        name: "{{ replication_user }}"
+        password: "{{ replication_password }}"
+        host: "{{ replication_host }}"
+        priv: "*.*:ALL"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
