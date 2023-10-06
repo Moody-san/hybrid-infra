@@ -1,10 +1,7 @@
 resource "oci_core_cpe" "cpe" {
   compartment_id = var.ocicompartment_id
   ip_address     = try(
-    aws_vpn_connection.default[0].tunnel1_address,
-    aws_vpn_connection.tunnel[0].tunnel1_address,
     aws_vpn_connection.preshared[0].tunnel1_address,
-    aws_vpn_connection.tunnel_preshared[0].tunnel1_address,
   "")
 }
 

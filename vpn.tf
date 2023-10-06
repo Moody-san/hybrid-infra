@@ -3,14 +3,14 @@ resource "random_string" "psk" {
   special = false
 }
 resource "aws_vpn_gateway" "gateway" {
-  vpc_id            = module.aws_server.vpc_id
+  vpc_id = module.aws_server.vpc_id
   tags = merge(
     { "Name" = "vpn-gateway" },
   )
 }
 
 resource "aws_customer_gateway" "main" {
-  bgp_asn    =  31898
+  bgp_asn    = 31898
   ip_address = "1.1.1.1"
   type       = "ipsec.1"
 
@@ -19,26 +19,25 @@ resource "aws_customer_gateway" "main" {
   }
 }
 module "oci-aws-vpn" {
-    providers = {
-        aws = aws.us
-        oci = oci.oci_us
-    }
-    source            = "./Modules/oci_aws_vpn_module"
-    drgid = module.oraclenetwork.ocidrgid
-    ocicompartment_id = var.oci_compartment_id
-    vpn_gateway_id = aws_vpn_gateway.gateway.id
-    customer_gateway_id = aws_customer_gateway.main.id
-    tunnel1_preshared_key = random_string.psk.result
-    tunnel2_preshared_key = random_string.psk.result
-    depends_on        = [module.oraclenetwork, module.aws_server]
+  providers = {
+    aws = aws.us
+    oci = oci.oci_us
+  }
+  source                = "./Modules/oci_aws_vpn_module"
+  create_vpn_connection = true
+  vpc_id                = module.aws_server.vpc_id
+  drgid                 = module.oraclenetwork.ocidrgid
+  ocicompartment_id     = var.oci_compartment_id
+  vpn_gateway_id        = aws_vpn_gateway.gateway.id
+  customer_gateway_id   = aws_customer_gateway.main.id
+  tunnel1_preshared_key = random_string.psk.result
+  tunnel2_preshared_key = random_string.psk.result
+  depends_on            = [module.oraclenetwork, module.aws_server]
 }
 
 
 module "aws_server" {
-    source = "./Modules/Aws_Module"
-    providers = {
-        aws = aws.us
-    }
+  source = "./Modules/Aws_Module"
 
 }
 

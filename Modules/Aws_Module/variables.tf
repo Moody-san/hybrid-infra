@@ -15,7 +15,7 @@ variable "subnet_ip" {
 }
 
 variable "zone" {
-  default = "us-east-1a"
+  default = "us-east-1"
 }
 
 variable "server_private_ip" {
