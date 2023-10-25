@@ -9,3 +9,10 @@ output server_details {
     private_ip = azurerm_linux_virtual_machine.main.private_ip_address
   }
 }
+
+output backenddetails {
+  value = {
+    ip_address = azurerm_linux_virtual_machine.main.private_ip_address
+    server_name = azurerm_linux_virtual_machine.main.computer_name
+  }
+}

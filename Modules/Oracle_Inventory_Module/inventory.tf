@@ -1,10 +1,9 @@
 resource "null_resource" "add_bastion_fingerprint_to_known_hosts" {
-  count = length(local.allservers.ocibastionpubip)
   triggers = {
     always_run = timestamp()
   }
 
- provisioner "local-exec" {
+  provisioner "local-exec" {
     command = "if [ -f ~/.ssh/known_hosts ]; then rm -f ~/.ssh/known_hosts*; fi"
   }
 
@@ -21,6 +20,7 @@ resource "null_resource" "add_bastion_fingerprint_to_known_hosts" {
   }
 }
 
+
 resource "null_resource" "add_oracleservers_fingerprint_to_tmp" {
   count = length(local.allservers.oracleips)
   triggers = {
@@ -33,35 +33,24 @@ resource "null_resource" "add_oracleservers_fingerprint_to_tmp" {
   }
 }
 
-resource "null_resource" "add_azureservers_fingerprint_to_tmp" {
-  count = length(local.allservers.azureips)
-  triggers = {
-    always_run = timestamp() 
-  }
-  depends_on = [null_resource.add_bastion_fingerprint_to_known_hosts]
-
-  provisioner "local-exec" {
-    command = "ssh -i ~/.ssh/id_rsa ${local.allservers.ocibastionpubip[0]} ssh-keyscan -t rsa ${local.allservers.azureips[count.index]} >> ~/tmp.txt 2>> ~/error.txt"
-  }
-}
 
 
 resource "null_resource" "add_servers_to_known_hosts" {
   triggers = {
     always_run = timestamp()
   }
-  depends_on = [null_resource.add_azureservers_fingerprint_to_tmp, null_resource.add_oracleservers_fingerprint_to_tmp]
+  depends_on = [null_resource.add_oracleservers_fingerprint_to_tmp]
 
   provisioner "local-exec" {
     command = "if [ -f ~/.ssh/known_hosts ]; then rm -f ~/.ssh/known_hosts*; fi"
   }
 
   provisioner "local-exec" {
-    command = "if [ -f ~/tmp.txt ]; then cat ~/tmp.txt >> ~/.ssh/known_hosts; fi"
+    command = "cat ~/tmp.txt > ~/.ssh/known_hosts"
   }
 
   provisioner "local-exec" {
-    command = "if [ -f ~/tmp.txt ]; then rm -f ~/tmp.txt; fi"
+    command = "rm -f ~/tmp.txt"
   }
 }
 
@@ -78,8 +67,3 @@ resource "local_file" "dbinventory_file" {
   filename = var.dbinventorypath
 }
 
-# azure inventory
-resource "local_file" "azurek8sinventory_file" {
-  content = templatefile(var.azurek8stemplatepath,local.allservers )
-  filename = var.azurek8sinventorypath
-}

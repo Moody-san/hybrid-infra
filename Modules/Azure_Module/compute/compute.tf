@@ -1,15 +1,29 @@
 data "template_file" "cloud-config" {
   template = <<YAML
+#cloud-config
+
+# Add a shell script file
+write_files:
+  - path: /tmp/custom-script.sh
+    content: |
+      #!/bin/bash
+      sudo apt update -y
+      sudo DEBIAN_FRONTEND='noninteractive' apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' upgrade
+      sudo DEBIAN_FRONTEND='noninteractive' apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' dist-upgrade
+      sudo apt-get autoremove -y
+      sudo apt-get clean
+      sudo apt-get autoclean
+      sudo shutdown -r now
+    permissions: "0755"  # Make the script executable
+
+# Execute the shell script
 runcmd:
-  - sudo apt update -y
-  - sudo DEBIAN_FRONTEND='noninteractive' apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' upgrade
-  - sudo DEBIAN_FRONTEND='noninteractive' apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' dist-upgrade
-  - sudo apt-get autoremove -y
-  - sudo apt-get clean
-  - sudo apt-get autoclean
-  - sudo shutdown -r now 
+  - chmod +x /tmp/custom-script.sh  # Ensure the script is executable
+  - /tmp/custom-script.sh
+  - rm /tmp/custom-script.sh
 YAML
 }
+
 
 resource "azurerm_linux_virtual_machine" "main" {
   name                  = "${var.hostname}"

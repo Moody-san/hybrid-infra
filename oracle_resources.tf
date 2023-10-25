@@ -30,6 +30,18 @@ module "oracleservers" {
   depends_on     = [module.oraclenetwork]
 }
 
-output "names" {
+output "oracle_servers" {
   value = module.oracleservers
+}
+
+
+module "oracleloadbalancer" {
+  providers = {
+    oci = oci.oci_us
+  }
+  source         = "./Modules/Oracle_Module/loadbalancer"
+  subnet_id      = module.oraclenetwork.ocipublicsubnet_id
+  compartment_ocid = var.oci_compartment_id
+  depends_on     = [module.oracleservers]
+  oracleservers = module.oracleservers
 }

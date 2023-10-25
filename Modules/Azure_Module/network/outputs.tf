@@ -13,3 +13,7 @@ output "azureprivatesubnet_id" {
 output "vcnname" {
   value = azurerm_virtual_network.azurevcn.name
 }
+
+output "azurevnet_id" {
+  value = azurerm_virtual_network.azurevcn.id
+}

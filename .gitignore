@@ -48,3 +48,5 @@ terraform.rc
 *.key
 *.crt
 serverkey
+terraform.txt
+**/Oracle_Inventory/
