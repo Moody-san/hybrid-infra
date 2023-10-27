@@ -32,6 +32,16 @@ variable "diskstoragegbs" {
   default = "32"
 }
 
+variable "eviction_policy" {
+  default = "Delete"
+}
+variable "priority" {
+  default = "Spot"
+}
+variable "max_bid_price" {
+  default = "0.011"
+}
+
 variable "location" {
 
 }

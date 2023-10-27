@@ -32,7 +32,7 @@ resource "azurerm_lb_rule" "lbrules" {
   name                           = "lbrule1"
   protocol                       = "Tcp"
   frontend_port                  = 80
-  backend_port                   = 31736
+  backend_port                   = 80
   frontend_ip_configuration_name = azurerm_lb.slb.frontend_ip_configuration[0].name
   probe_id                       = azurerm_lb_probe.lbhealthprobe.id
   backend_address_pool_ids = [azurerm_lb_backend_address_pool.lb_backend_address_pool.id]

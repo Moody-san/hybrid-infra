@@ -33,6 +33,6 @@ resource "oci_network_load_balancer_backend" "nlb_backend" {
   backend_set_name         = oci_network_load_balancer_backend_set.nlb_backend_set.name
   network_load_balancer_id = oci_network_load_balancer_network_load_balancer.nlb_load_balancer.id
   name                     = local.instances[count.index].server_name
-  port                     = 31736
+  port                     = 80
   target_id                = local.instances[count.index].server_id
 }

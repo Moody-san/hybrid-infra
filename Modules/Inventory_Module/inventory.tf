@@ -13,7 +13,7 @@ resource "null_resource" "add_bastion_fingerprint_to_known_hosts" {
   }
 
   provisioner "local-exec" {
-    command = "ssh-keyscan -t rsa ${local.allservers.ocibastionpubip[0]} >> ~/.ssh/known_hosts 2>> ~/error.txt" 
+    command = "ssh-keyscan -t rsa ${local.allservers.ocibastionpubip[0]} >> ~/.ssh/known_hosts 2>> ~/error.txt || echo ok" 
   }
 
   provisioner "local-exec" {
@@ -29,7 +29,7 @@ resource "null_resource" "add_oracleservers_fingerprint_to_tmp" {
   depends_on = [null_resource.add_bastion_fingerprint_to_known_hosts]
 
   provisioner "local-exec" {
-    command = "ssh -i ~/.ssh/id_rsa ${local.allservers.ocibastionpubip[0]} ssh-keyscan -t rsa ${local.allservers.oracleips[count.index]} >> ~/tmp.txt 2>> ~/error.txt"
+    command = "ssh -i ~/.ssh/id_rsa ${local.allservers.ocibastionpubip[0]} ssh-keyscan -t rsa ${local.allservers.oracleips[count.index]} >> ~/tmp.txt 2>> ~/error.txt || echo ok"
   }
 }
 
@@ -41,7 +41,7 @@ resource "null_resource" "add_azureservers_fingerprint_to_tmp" {
   depends_on = [null_resource.add_bastion_fingerprint_to_known_hosts]
 
   provisioner "local-exec" {
-    command = "ssh -i ~/.ssh/id_rsa ${local.allservers.ocibastionpubip[0]} ssh-keyscan -t rsa ${local.allservers.azureips[count.index]} >> ~/tmp.txt 2>> ~/error.txt"
+    command = "ssh -i ~/.ssh/id_rsa ${local.allservers.ocibastionpubip[0]} ssh-keyscan -t rsa ${local.allservers.azureips[count.index]} >> ~/tmp.txt 2>> ~/error.txt || echo ok"
   }
 }
 

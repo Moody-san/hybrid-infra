@@ -1,4 +1,5 @@
 resource "null_resource" "add_bastion_fingerprint_to_known_hosts" {
+  count = length(local.allservers.ocibastionpubip)
   triggers = {
     always_run = timestamp()
   }
@@ -8,11 +9,15 @@ resource "null_resource" "add_bastion_fingerprint_to_known_hosts" {
   }
 
   provisioner "local-exec" {
+    command = "if [ -f ~/terraform.txt ]; then rm -f ~/terraform.txt; fi"
+  }
+
+  provisioner "local-exec" {
     command = "if [ -f ~/tmp.txt ]; then rm -f ~/tmp.txt; fi"
   }
 
   provisioner "local-exec" {
-    command = "ssh-keyscan -t rsa ${local.allservers.ocibastionpubip[0]} >> ~/.ssh/known_hosts 2>> ~/error.txt" 
+    command = "ssh-keyscan -t rsa ${local.allservers.ocibastionpubip[0]} >> ~/.ssh/known_hosts 2>> ~/error.txt || echo ok" 
   }
 
   provisioner "local-exec" {
@@ -29,7 +34,7 @@ resource "null_resource" "add_oracleservers_fingerprint_to_tmp" {
   depends_on = [null_resource.add_bastion_fingerprint_to_known_hosts]
 
   provisioner "local-exec" {
-    command = "ssh -i ~/.ssh/id_rsa ${local.allservers.ocibastionpubip[0]} ssh-keyscan -t rsa ${local.allservers.oracleips[count.index]} >> ~/tmp.txt 2>> ~/error.txt"
+    command = "ssh -i ~/.ssh/id_rsa ${local.allservers.ocibastionpubip[0]} ssh-keyscan -t rsa ${local.allservers.oracleips[count.index]} >> ~/tmp.txt 2>> ~/error.txt || echo ok"
   }
 }
 
@@ -39,18 +44,18 @@ resource "null_resource" "add_servers_to_known_hosts" {
   triggers = {
     always_run = timestamp()
   }
-  depends_on = [null_resource.add_oracleservers_fingerprint_to_tmp]
+  depends_on = [null_resource.add_bastion_fingerprint_to_known_hosts,null_resource.add_oracleservers_fingerprint_to_tmp]
 
   provisioner "local-exec" {
     command = "if [ -f ~/.ssh/known_hosts ]; then rm -f ~/.ssh/known_hosts*; fi"
   }
 
   provisioner "local-exec" {
-    command = "cat ~/tmp.txt > ~/.ssh/known_hosts"
+    command = "if [ -f ~/tmp.txt ]; then cat ~/tmp.txt >> ~/.ssh/known_hosts; fi"
   }
 
   provisioner "local-exec" {
-    command = "rm -f ~/tmp.txt"
+    command = "if [ -f ~/tmp.txt ]; then rm -f ~/tmp.txt; fi"
   }
 }
 
