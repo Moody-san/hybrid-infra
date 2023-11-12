@@ -19,7 +19,7 @@ data "oci_core_ipsec_connection_tunnels" "created_ip_sec_connection_tunnels" {
 
 data "oci_core_ipsec_config" "ip_sec_connection_device_config" {
   ipsec_id   = oci_core_ipsec.ip_sec_connection.id
-  depends_on = [null_resource.ip_sec_connection_tunnel1_configuration,null_resource.ip_sec_connection_tunnel2_configuration]
+  depends_on = [null_resource.ip_sec_connection_tunnel1_configuration, null_resource.ip_sec_connection_tunnel2_configuration]
 }
 
 resource "null_resource" "compile_script" {
@@ -34,7 +34,7 @@ resource "null_resource" "compile_script" {
 
 resource "null_resource" "ip_sec_connection_tunnel1_configuration" {
   triggers = {
-    value  = "run only once"
+    value = "run only once"
   }
   depends_on = [oci_core_ipsec.ip_sec_connection, null_resource.compile_script]
   provisioner "local-exec" {
@@ -45,7 +45,7 @@ resource "null_resource" "ip_sec_connection_tunnel1_configuration" {
 
 resource "null_resource" "ip_sec_connection_tunnel2_configuration" {
   triggers = {
-    value  = "run only once"
+    value = "run only once"
   }
   depends_on = [oci_core_ipsec.ip_sec_connection, null_resource.compile_script, null_resource.ip_sec_connection_tunnel1_configuration]
   provisioner "local-exec" {

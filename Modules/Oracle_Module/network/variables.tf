@@ -8,14 +8,14 @@ variable "vcn" {
 
 variable "internet_gateway" {
   default = {
-    name = "igw"
+    name           = "igw"
     destination_ip = "0.0.0.0/0"
   }
 }
 
 variable "nat_gateway" {
   default = {
-    name = "ngw"
+    name           = "ngw"
     destination_ip = "0.0.0.0/0"
   }
 }
@@ -23,14 +23,14 @@ variable "nat_gateway" {
 variable "privatesubnet" {
   default = {
     name = "privatesubnet",
-    ip = "10.0.1.0/24"
+    ip   = "10.0.1.0/24"
   }
 }
 
 variable "pubsubnet" {
   default = {
     name = "pubsubnet",
-    ip = "10.0.3.0/24"
+    ip   = "10.0.3.0/24"
   }
 }
 

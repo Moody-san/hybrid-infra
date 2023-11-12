@@ -26,15 +26,15 @@ YAML
 
 
 resource "azurerm_linux_virtual_machine" "main" {
-  name                  = "${var.hostname}"
+  name                  = var.hostname
   location              = var.location
   resource_group_name   = var.rgname
   size                  = var.vm_size
-  eviction_policy                 = var.eviction_policy
-  priority                        = var.priority
-  max_bid_price                   = var.max_bid_price
+  eviction_policy       = var.eviction_policy
+  priority              = var.priority
+  max_bid_price         = var.max_bid_price
   network_interface_ids = [azurerm_network_interface.azurenic.id]
-  user_data ="${base64encode(data.template_file.cloud-config.rendered)}"
+  user_data             = base64encode(data.template_file.cloud-config.rendered)
 
   source_image_reference {
     offer     = local.source_image_reference.offer

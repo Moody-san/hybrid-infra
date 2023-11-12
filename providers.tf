@@ -6,8 +6,8 @@ terraform {
       version = ">= 4.0"
     }
     oci = {
-      source  = "hashicorp/oci"
-      version = ">= 4.0.0"
+      source  = "oracle/oci"
+      version = "5.19.0"
     }
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -35,7 +35,7 @@ provider "oci" {
   alias  = "oci_us"
 }
 
-provider "azurerm" {  // using paid version of azurerm provider currently change to student subscription
+provider "azurerm" { // using paid version of azurerm provider currently change to student subscription
   features {}
   subscription_id = var.az_subscription_id
   client_id       = var.az_client_id

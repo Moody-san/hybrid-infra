@@ -28,7 +28,7 @@ resource "oci_core_instance" "server" {
   availability_domain = var.AD
   compartment_id      = var.compartment_id
   shape               = var.vm_shape
-  display_name = var.server_name
+  display_name        = var.server_name
 
   create_vnic_details {
     assign_private_dns_record = true
@@ -47,11 +47,11 @@ resource "oci_core_instance" "server" {
     ocpus         = var.cpu
     memory_in_gbs = var.memory
   }
-  
+
   metadata = {
     ssh_authorized_keys = file(var.ssh_key)
-    user_data = "${base64encode(data.template_file.cloud-config.rendered)}"
+    user_data           = "${base64encode(data.template_file.cloud-config.rendered)}"
   }
-  
+
 }
 
