@@ -45,3 +45,15 @@ module "oracleloadbalancer" {
   depends_on       = [module.oracleservers]
   oracleservers    = module.oracleservers
 }
+
+
+module "k8soracleloadbalancer" {
+  providers = {
+    oci = oci.oci_us
+  }
+  source           = "./Modules/Oracle_Module/k8sloadbalancer"
+  subnet_id        = module.oraclenetwork.ociprivatesubnet_id
+  compartment_ocid = var.oci_compartment_id
+  depends_on       = [module.oracleservers]
+  oracleservers    = module.oracleservers
+}

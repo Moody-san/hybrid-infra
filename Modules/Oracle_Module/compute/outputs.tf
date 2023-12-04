@@ -15,6 +15,7 @@ output "server_details" {
 
 output "backenddetails" {
   value = {
+    server_ip   = oci_core_instance.server.private_ip
     server_id   = oci_core_instance.server.id
     server_name = oci_core_instance.server.display_name
   }
