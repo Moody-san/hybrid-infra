@@ -9,14 +9,6 @@ variable "oci_ubuntu22_id" {
 
 }
 
-variable "oci_ubuntu20_id" {
-
-}
-
-variable "oci_oraclelinux8_id" {
-
-}
-
 variable "az_subscription_id" {
 
 }
