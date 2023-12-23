@@ -42,6 +42,7 @@ terraform.rc
 **/script.js
 
 .oci/
+*/.oci/
 
 *.pem
 *.pub
