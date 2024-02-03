@@ -10,7 +10,7 @@ module "inventory" {
   controllertemplatepath  = "../ansible-controller-setup/inventory.tpl"
   azureservers            = module.azureservers
   oracleservers           = module.oracleservers
-  depends_on              = [module.oracleservers, module.azureservers, module.oci-azure-vpn]
+  depends_on              = [module.oracleservers, module.azureservers]
 }
 
 

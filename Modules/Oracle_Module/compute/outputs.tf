@@ -20,3 +20,10 @@ output "backenddetails" {
     server_name = oci_core_instance.server.display_name
   }
 }
+
+output "output_ips" {
+  value = {
+    server_ip   = oci_core_instance.server.public_ip != ""? oci_core_instance.server.public_ip : oci_core_instance.server.private_ip
+    server_name = oci_core_instance.server.display_name
+  }
+}

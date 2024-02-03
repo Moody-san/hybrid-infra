@@ -24,33 +24,40 @@ module "azureservers" {
   depends_on      = [module.azurenetwork]
 }
 
-module "azurelb" {
-  source = "./Modules/Azure_Module/loadbalancer"
-  providers = {
-    azurerm = azurerm.azure_st
-  }
-  location     = module.azurenetwork.location
-  rgname       = module.azurenetwork.name
-  azureservers = module.azureservers
-  azurevnetid  = module.azurenetwork.azurevnet_id
-  depends_on   = [module.azureservers]
-}
+# module "azurelb" {
+#   source = "./Modules/Azure_Module/loadbalancer"
+#   providers = {
+#     azurerm = azurerm.azure_st
+#   }
+#   location     = module.azurenetwork.location
+#   rgname       = module.azurenetwork.name
+#   azureservers = module.azureservers
+#   azurevnetid  = module.azurenetwork.azurevnet_id
+#   depends_on   = [module.azureservers]
+# }
 
+# output "azure_publiclb_public_ip" {
+#   value = module.azurelb.public_ip
+# }
 
-module "k8sazurelb" {
-  source = "./Modules/Azure_Module/k8sloadbalancer"
-  providers = {
-    azurerm = azurerm.azure_st
-  }
-  subnet_id    = module.azurenetwork.azureprivatesubnet_id
-  location     = module.azurenetwork.location
-  rgname       = module.azurenetwork.name
-  azureservers = module.azureservers
-  azurevnetid  = module.azurenetwork.azurevnet_id
-  depends_on   = [module.azureservers]
-}
+# module "k8sazurelb" {
+#   source = "./Modules/Azure_Module/k8sloadbalancer"
+#   providers = {
+#     azurerm = azurerm.azure_st
+#   }
+#   subnet_id    = module.azurenetwork.azureprivatesubnet_id
+#   location     = module.azurenetwork.location
+#   rgname       = module.azurenetwork.name
+#   azureservers = module.azureservers
+#   azurevnetid  = module.azurenetwork.azurevnet_id
+#   depends_on   = [module.azureservers]
+# }
+
+# output "azure_k8slb_private_ip" {
+#   value = module.k8sazurelb.private_ip
+# }
 
 output "azure_servers" {
-  value = module.azureservers
+  value = [for server in module.azureservers : server.output_ips]
 }
 

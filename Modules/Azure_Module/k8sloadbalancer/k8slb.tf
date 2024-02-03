@@ -40,4 +40,3 @@ resource "azurerm_lb_backend_address_pool_address" "backendip" {
   virtual_network_id      = var.azurevnetid
   ip_address              = local.instances[count.index].ip_address
 }
-

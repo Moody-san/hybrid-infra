@@ -31,20 +31,24 @@ module "oracleservers" {
 }
 
 output "oracle_servers" {
-  value = module.oracleservers
+  value = [for server in module.oracleservers : server.output_ips]
 }
 
 
-module "oracleloadbalancer" {
-  providers = {
-    oci = oci.oci_us
-  }
-  source           = "./Modules/Oracle_Module/loadbalancer"
-  subnet_id        = module.oraclenetwork.ocipublicsubnet_id
-  compartment_ocid = var.oci_compartment_id
-  depends_on       = [module.oracleservers]
-  oracleservers    = module.oracleservers
-}
+# module "oracleloadbalancer" {
+#   providers = {
+#     oci = oci.oci_us
+#   }
+#   source           = "./Modules/Oracle_Module/loadbalancer"
+#   subnet_id        = module.oraclenetwork.ocipublicsubnet_id
+#   compartment_ocid = var.oci_compartment_id
+#   depends_on       = [module.oracleservers]
+#   oracleservers    = module.oracleservers
+# }
+
+# output "oracle_publiclb_public_ip" {
+#   value = module.oracleloadbalancer.public_ip
+# }
 
 
 module "k8soracleloadbalancer" {
@@ -56,4 +60,8 @@ module "k8soracleloadbalancer" {
   compartment_ocid = var.oci_compartment_id
   depends_on       = [module.oracleservers]
   oracleservers    = module.oracleservers
+}
+
+output "oracle_k8sprivatelb_ip" {
+  value = module.k8soracleloadbalancer.private_ip
 }
