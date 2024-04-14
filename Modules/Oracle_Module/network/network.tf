@@ -19,6 +19,17 @@ resource "oci_core_subnet" "pubsubnet" {
   dns_label           = var.pubsubnet.name
 }
 
+resource "oci_core_subnet" "pubsubnet2" {
+  availability_domain = var.AD2
+  compartment_id      = var.compartment_id
+  display_name        = var.pubsubnet2.name
+  vcn_id              = oci_core_vcn.vcn.id
+  cidr_block          = var.pubsubnet2.ip
+  route_table_id      = oci_core_route_table.publicrt.id
+  security_list_ids   = [oci_core_security_list.publicsecuritylist.id]
+  dns_label           = var.pubsubnet2.name
+}
+
 resource "oci_core_route_table" "publicrt" {
   compartment_id = var.compartment_id
   display_name   = "publicrt"

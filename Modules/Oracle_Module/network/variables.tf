@@ -34,6 +34,13 @@ variable "pubsubnet" {
   }
 }
 
+variable "pubsubnet2" {
+  default = {
+    name = "pubsubnet2",
+    ip   = "10.0.5.0/24"
+  }
+}
+
 
 variable "egress_rules" {
   default = {
@@ -52,6 +59,9 @@ variable "compartment_id" {
 }
 
 variable "AD" {
+}
+
+variable "AD2" {
 }
 
 variable "azure_ipcidr" {

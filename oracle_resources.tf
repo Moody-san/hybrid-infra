@@ -9,6 +9,7 @@ module "oraclenetwork" {
   source         = "./Modules/Oracle_Module/network"
   compartment_id = var.oci_compartment_id
   AD             = data.oci_identity_availability_domains.ads.availability_domains[2]["name"]
+  AD2             = data.oci_identity_availability_domains.ads.availability_domains[1]["name"]
 }
 
 module "oracleservers" {
@@ -35,22 +36,6 @@ output "oracle_servers" {
 }
 
 
-# module "oracleloadbalancer" {
-#   providers = {
-#     oci = oci.oci_us
-#   }
-#   source           = "./Modules/Oracle_Module/loadbalancer"
-#   subnet_id        = module.oraclenetwork.ocipublicsubnet_id
-#   compartment_ocid = var.oci_compartment_id
-#   depends_on       = [module.oracleservers]
-#   oracleservers    = module.oracleservers
-# }
-
-# output "oracle_publiclb_public_ip" {
-#   value = module.oracleloadbalancer.public_ip
-# }
-
-
 module "k8soracleloadbalancer" {
   providers = {
     oci = oci.oci_us
@@ -62,6 +47,22 @@ module "k8soracleloadbalancer" {
   oracleservers    = module.oracleservers
 }
 
+module "publicoracleloadbalancer" {
+  providers = {
+    oci = oci.oci_us
+  }
+  source           = "./Modules/Oracle_Module/publicloadbalancer"
+  subnet_id        = module.oraclenetwork.ocipublicsubnet_id
+  subnet2_id        = module.oraclenetwork.ocipublicsubnet2_id
+  compartment_ocid = var.oci_compartment_id
+  depends_on       = [module.oracleservers]
+  oracleservers    = module.oracleservers
+}
+
 output "oracle_k8sprivatelb_ip" {
   value = module.k8soracleloadbalancer.private_ip
+}
+
+output "oracle_publiclb_ip" {
+  value = module.publicoracleloadbalancer.public_ip
 }

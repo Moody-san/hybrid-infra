@@ -29,3 +29,7 @@ variable "az_client_secret" {
 variable "az_tenant_id" {
 
 }
+
+variable "ssl_password" {
+  
+}

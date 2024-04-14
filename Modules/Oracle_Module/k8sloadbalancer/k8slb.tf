@@ -66,7 +66,7 @@ resource "oci_network_load_balancer_listener" "k8s_nlb_tcp_listener" {
 resource "oci_network_load_balancer_backend_set" "k8s_nlb_backend_set" {
   health_checker {
     protocol = "TCP"
-    port = 6443
+    port     = 6443
   }
 
   name                     = "k8s_nlb_backend_set"

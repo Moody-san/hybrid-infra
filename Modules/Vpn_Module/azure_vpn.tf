@@ -10,7 +10,8 @@ resource "azurerm_public_ip" "azurevpngwpubip" {
   name                = "azurevpngwpubip"
   location            = var.azurelocation
   resource_group_name = var.azurergname
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
+  sku = "Standard"
 }
 
 data "azurerm_public_ip" "gwip" {
