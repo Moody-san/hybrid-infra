@@ -11,7 +11,7 @@ This repository contains Terraform code to provision infrastructure across multi
 - **Compartment ID for Oracle**: In Oracle, create a new compartment beyond the default and export its ID to the environment (e.g., `export TF_VAR_oci_compartment_id="your_compartment_id"`).
 - **SSH Key Pair**: Create an SSH key pair for the servers and add its public key path to the `ssh_key` variable in `variables.tf` (or export it to the environment).
 - **SSL Certificate for Load Balancers**: Place your SSL certificate files in `~/ssl`, which should contain `ca.txt`, `certificate.txt`, `cert.pfx`, and `private.txt`. Export the `cert.pfx` SSL password to the environment, as needed by Azure's application gateway.
-- **Software Requirements**: Ensure Terraform CLI and Node.js are installed, the latter for advanced VPN configuration since it's unsupported by the OCI provider.
+- **Software Requirements**: Ensure Terraform CLI , Node.js and tsc are installed, the latter for advanced VPN configuration since it's unsupported by the OCI provider.
 
 ## Installation
 
