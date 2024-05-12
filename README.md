@@ -43,3 +43,9 @@ Edit the server.tf file to easily scale up and down on Oracle and Azure Cloud
 - **Kubernetes Setup**: For setting up Kubernetes on this infrastructure, see [ansible-k8s-deployment](https://github.com/Moody-san/ansible-k8s-deployment).
 - **MariaDB Cluster Setup**: For setting up a MariaDB cluster with Kubernetes-based failover, visit [ansible-galeracluster-deployment](https://github.com/Moody-san/ansible-galeracluster-deployment).
 - **CI/CD and Automation**: For CI/CD and other automation scripts, refer to [ansible-controller-setup](https://github.com/Moody-san/ansible-controller-setup).
+## Demo
+
+
+https://github.com/Moody-san/terraform-multicloud-infra/assets/87976665/4b05f190-1494-4465-8cfd-bc209d513d3b
+
+
