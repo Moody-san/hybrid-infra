@@ -45,7 +45,6 @@ Edit the server.tf file to easily scale up and down on Oracle and Azure Cloud
 - **CI/CD and Automation**: For CI/CD and other automation scripts, refer to [ansible-controller-setup](https://github.com/Moody-san/ansible-controller-setup).
 ## Demo
 
-
-https://github.com/Moody-san/terraform-multicloud-infra/assets/87976665/4b05f190-1494-4465-8cfd-bc209d513d3b
+https://www.youtube.com/watch?v=HC4oogjLf64
 
 
