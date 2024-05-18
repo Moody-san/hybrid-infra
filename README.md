@@ -47,4 +47,12 @@ Edit the server.tf file to easily scale up and down on Oracle and Azure Cloud
 
 https://www.youtube.com/watch?v=HC4oogjLf64
 
+## Presentation
 
+https://docs.google.com/presentation/d/1peuU2K6cA1b9EeZd8g-iz_ve9KucFXQJLtqBe5yV294/edit?usp=sharing
+
+## Todo
+
+- Set up a jenkins controller that will watch terraform repository for infrastructure changes based on commits and update the deployed resources . Will have to use remote backend for state files for this .
+- Better more modular code with mockups for validating modules
+- Distributing the galera cluster across cloud kinda makes one cloud read only in case vpn is down , so instead either use an entirely different cloud for database or use 2 galera clusters (each on a different cloud) which remain in sync  .
